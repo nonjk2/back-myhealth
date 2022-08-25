@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { AuthService } from 'src/auth/auth.service';
 import { UsersRequestDto } from '../dto/user.request.dto';
-import { User } from '../user.schema';
+import { UsersRepository } from '../users.repository';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>,
+    private readonly userRepository: UsersRepository,
+    private readonly authService: AuthService,
   ) {}
   async signUp(body: UsersRequestDto) {
-    const { email, profileURL } = body;
-    const isUserExist = await this.userModel.exists({ email });
-
+    const { email, profileURL, id } = body;
+    const isUserExist = await this.userRepository.existsByEmail(email);
     if (isUserExist) {
+    } else {
+      await this.userRepository.create({
+        email,
+        profileURL,
+        id,
+      });
     }
-
-    const user = await this.userModel.create({
-      email,
-      profileURL,
-    });
-
-    return user;
+    return await this.authService.jwtLogIn(body);
+    // return user.readOnlyData;
   }
 }
