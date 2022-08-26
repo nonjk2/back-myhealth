@@ -23,13 +23,13 @@ export class Labtime extends Document {
 
   @IsNumber()
   @Prop()
-  time: number;
+  time?: number;
   @IsNumber()
   @Prop()
-  restTime: number;
+  restTime?: number;
   @IsNumber()
   @Prop()
-  activeTime: number;
+  activeTime?: number;
 }
 
 /** 데이터 베이스에서 끌어온것 */

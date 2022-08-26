@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import { IsNotEmpty, IsString } from 'class-validator';
 // import { ApiProperty } from '@nestjs/swagger';
 import { Document, Types } from 'mongoose';
+import { Labtime } from './dto/undongs.labtime.schema';
 
 const options: SchemaOptions = {
   timestamps: true,
@@ -36,7 +37,7 @@ export class Undong extends Document {
   activetime: string;
 
   @Prop()
-  sets: number[];
+  sets: Labtime;
 }
 
 /** 데이터 베이스에서 끌어온것 */

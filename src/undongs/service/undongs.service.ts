@@ -15,8 +15,8 @@ export class UndongsService {
   async getAll() {
     throw new Error('Method not implemented.');
   }
-  async postUndong() {
-    throw new Error('Method not implemented.');
+  async postUndong(body) {
+    return await body;
   }
   async delUndong() {
     throw new Error('Method not implemented.');

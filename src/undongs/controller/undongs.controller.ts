@@ -8,6 +8,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { UndongRequestDto } from '../dto/undongs.request.dto';
 import { UndongsService } from '../service/undongs.service';
 
 @Controller('undongs')
@@ -21,8 +22,8 @@ export class UndongsController {
   }
   @Post()
   /**운동 저장하기 */
-  async PostUndongs() {
-    return this.undongService.postUndong();
+  async PostUndongs(@Body() body: UndongRequestDto) {
+    return this.undongService.postUndong(body);
   }
   @Get()
 
