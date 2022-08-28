@@ -34,9 +34,3 @@ export class Labtime extends Document {
 
 /** 데이터 베이스에서 끌어온것 */
 export const Labtimechema = SchemaFactory.createForClass(Labtime);
-
-Labtimechema.virtual('readOnlyData').get(function (this: Labtime) {
-  return {
-    id: this.id,
-  };
-});

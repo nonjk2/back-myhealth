@@ -23,6 +23,11 @@ import { User } from '../user.schema';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Get('all')
+  getAllUser() {
+    return this.usersService.getAlluser();
+  }
+
   @Post()
   async signUp(@Body() body: UsersRequestDto) {
     return await this.usersService.signUp(body);

@@ -8,6 +8,9 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { CurrentUser } from 'src/common/decoraters/user.decorater';
+import { User } from 'src/users/user.schema';
 import { UndongRequestDto } from '../dto/undongs.request.dto';
 import { UndongsService } from '../service/undongs.service';
 
@@ -20,10 +23,11 @@ export class UndongsController {
   async getAllUndongs() {
     return this.undongService.getAll();
   }
+  @UseGuards(JwtAuthGuard)
   @Post()
   /**운동 저장하기 */
-  async PostUndongs(@Body() body: UndongRequestDto) {
-    return this.undongService.postUndong(body);
+  async PostUndongs(@Body() body: UndongRequestDto, @CurrentUser() user: User) {
+    return this.undongService.postUndong(body, user);
   }
   @Get()
 

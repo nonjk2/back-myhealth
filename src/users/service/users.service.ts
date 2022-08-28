@@ -9,6 +9,13 @@ export class UsersService {
     private readonly userRepository: UsersRepository,
     private readonly authService: AuthService,
   ) {}
+
+  async getAlluser() {
+    const allUser = await this.userRepository.findAll();
+    // const readOnlyUsers = allUser.map((v) => v.readOnlyData);
+    return allUser;
+  }
+
   async signUp(body: UsersRequestDto) {
     const { email, profileURL, id } = body;
     const isUserExist = await this.userRepository.existsByEmail(email);

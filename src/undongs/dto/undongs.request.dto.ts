@@ -2,7 +2,6 @@ import { PickType } from '@nestjs/swagger';
 import { Undong } from '../undongs.schema';
 
 export class UndongRequestDto extends PickType(Undong, [
-  'Myid',
   'startdate',
   'name',
   'activetime',

@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 // import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
+import { Undong } from 'src/undongs/undongs.schema';
 
 export type CatDocument = User & Document;
 const options: SchemaOptions = {
@@ -29,17 +30,30 @@ export class User extends Document {
   readonly readOnlyData: {
     id: string;
     email: string;
+
     profileURL: string;
   };
+
+  readonly undongs: Undong[];
 }
 
 /** 데이터 베이스에서 끌어온것 */
-export const UserSchema = SchemaFactory.createForClass(User);
+const _UserSchema = SchemaFactory.createForClass(User);
 
-UserSchema.virtual('readOnlyData').get(function (this: User) {
+_UserSchema.virtual('readOnlyData').get(function (this: User) {
   return {
     id: this.id,
     email: this.email,
     profileURL: this.profileURL,
+    undongs: this.undongs,
   };
 });
+_UserSchema.virtual('undongs', {
+  ref: 'undongs',
+  localField: '_id',
+  foreignField: 'Myid',
+});
+_UserSchema.set('toObject', { virtuals: true });
+_UserSchema.set('toJSON', { virtuals: true });
+
+export const UserSchema = _UserSchema;
