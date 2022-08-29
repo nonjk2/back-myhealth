@@ -1,10 +1,9 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 // import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { Undong } from 'src/undongs/undongs.schema';
 
-export type CatDocument = User & Document;
 const options: SchemaOptions = {
   timestamps: true,
 };
@@ -30,8 +29,8 @@ export class User extends Document {
   readonly readOnlyData: {
     id: string;
     email: string;
-
     profileURL: string;
+    undongs: Undong[];
   };
 
   readonly undongs: Undong[];
@@ -49,11 +48,9 @@ _UserSchema.virtual('readOnlyData').get(function (this: User) {
   };
 });
 _UserSchema.virtual('undongs', {
-  ref: 'undongs',
-  localField: '_id',
-  foreignField: 'Myid',
+  ref: 'Undong' /** 참조할 컬렉션 */,
+  localField: '_id' /** 현재 스키마에 선언되어있는 참조할 필드 */,
+  foreignField: 'myid' /** 컬렉션에서 참조할 필드 */,
 });
-_UserSchema.set('toObject', { virtuals: true });
-_UserSchema.set('toJSON', { virtuals: true });
 
 export const UserSchema = _UserSchema;

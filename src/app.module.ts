@@ -7,7 +7,7 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 @Module({
   imports: [

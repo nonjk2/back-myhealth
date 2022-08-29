@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { User } from 'src/users/user.schema';
 import { UsersRepository } from 'src/users/users.repository';
 import { Labtime } from '../dto/undongs.labtime.schema';
@@ -15,13 +15,17 @@ export class UndongsService {
     private readonly userRepository: UsersRepository,
   ) {}
   async getAll() {
-    const result = await this.undongModel.find();
+    const result =
+      // = await this.undongModel.find();
+      await this.undongModel.find({
+        myid: { $in: ['630c5cedc2c81b2f875bdc44'] },
+      });
     return result;
   }
   async postUndong(undongsData: UndongRequestDto, user: User) {
     const newUndongData = new this.undongModel({
       ...undongsData,
-      Myid: user.id,
+      myid: user.id,
     });
     newUndongData.save((err, result) => {
       undongsData.sets.forEach((v) => {

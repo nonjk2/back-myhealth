@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import { IsNotEmpty, IsString } from 'class-validator';
 // import { ApiProperty } from '@nestjs/swagger';
 import { Document, Types } from 'mongoose';
+import { User } from 'src/users/user.schema';
 import { Labtime } from './dto/undongs.labtime.schema';
 
 const options: SchemaOptions = {
@@ -11,12 +12,11 @@ const options: SchemaOptions = {
 @Schema(options)
 export class Undong extends Document {
   @Prop({
-    type: Types.ObjectId,
     required: true,
-    ref: 'users',
+    ref: User.name,
   })
   @IsNotEmpty()
-  Myid: Types.ObjectId;
+  myid: string;
 
   @IsString()
   @Prop()
@@ -37,4 +37,8 @@ export class Undong extends Document {
 }
 
 /** 데이터 베이스에서 끌어온것 */
-export const Undongchema = SchemaFactory.createForClass(Undong);
+const _Undongchema = SchemaFactory.createForClass(Undong);
+
+_Undongchema.set('toObject', { virtuals: true });
+_Undongchema.set('toJSON', { virtuals: true });
+export const Undongchema = _Undongchema;

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Undongchema } from 'src/undongs/undongs.schema';
+import { Undong, Undongchema } from 'src/undongs/undongs.schema';
 import { UsersRequestDto } from './dto/user.request.dto';
 import { User } from './user.schema';
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class UsersRepository {
@@ -12,11 +12,11 @@ export class UsersRepository {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
   async findAll() {
-    const UndongsModel = mongoose.model('undongs', Undongchema);
-    console.log(UndongsModel);
+    const UndongsModel = await mongoose.model('Undong', Undongchema);
     const result = await this.userModel
       .find()
-      .populate('undongs', UndongsModel);
+      .populate({ path: 'undongs', model: Undong.name })
+      .lean();
 
     return result;
   }
