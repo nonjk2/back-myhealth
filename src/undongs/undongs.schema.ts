@@ -21,6 +21,9 @@ export class Undong extends Document {
   @IsString()
   @Prop()
   startdate: string;
+  @IsString()
+  @Prop()
+  enddate: string;
 
   @IsString()
   @IsNotEmpty()

@@ -14,11 +14,11 @@ export class UndongsService {
     @InjectModel(Labtime.name) private readonly labtimeModel: Model<Labtime>,
     private readonly userRepository: UsersRepository,
   ) {}
-  async getAll() {
+  async getAll(user: User) {
     const result =
       // = await this.undongModel.find();
       await this.undongModel.find({
-        myid: { $in: ['630c5cedc2c81b2f875bdc44'] },
+        myid: user.id,
       });
     return result;
   }
@@ -40,7 +40,7 @@ export class UndongsService {
       });
     });
 
-    return '성공';
+    return newUndongData;
   }
   async delUndong() {
     throw new Error('Method not implemented.');

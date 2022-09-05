@@ -18,10 +18,11 @@ import { UndongsService } from '../service/undongs.service';
 export class UndongsController {
   constructor(private readonly undongService: UndongsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   /** 운동전부 가져오기 */
-  async getAllUndongs() {
-    return this.undongService.getAll();
+  async getAllUndongs(@CurrentUser() user: User) {
+    return this.undongService.getAll(user);
   }
   @UseGuards(JwtAuthGuard)
   @Post()

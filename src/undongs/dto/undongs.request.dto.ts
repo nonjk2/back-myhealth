@@ -6,6 +6,7 @@ export class UndongRequestDto extends PickType(Undong, [
   'name',
   'activetime',
   'sets',
+  'enddate',
 ] as const) {
   id: string;
 }
