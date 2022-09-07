@@ -4,12 +4,15 @@ import {
   Get,
   Post,
   Req,
+  UploadedFiles,
   UseFilters,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decoraters/user.decorater';
+import { multerOptions } from 'src/common/utils/multer.options';
 import { User } from 'src/users/user.schema';
 import { UndongRequestDto } from '../dto/undongs.request.dto';
 import { UndongsService } from '../service/undongs.service';
@@ -35,5 +38,16 @@ export class UndongsController {
   /** 운동 삭제하기 */
   async DeleteUndongs() {
     return this.undongService.delUndong();
+  }
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FilesInterceptor('image', 10, multerOptions('undongs')))
+  @Post('upload')
+  async UploadUndong(
+    @CurrentUser() user: User,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
+    return {
+      image: `http://localhost:8000/media/undongs/${files[0].filename}`,
+    };
   }
 }
