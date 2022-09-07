@@ -5,6 +5,7 @@ import { User } from 'src/users/user.schema';
 import { UsersRepository } from 'src/users/users.repository';
 import { Labtime } from '../dto/undongs.labtime.schema';
 import { UndongRequestDto } from '../dto/undongs.request.dto';
+import { ImageUpload } from '../dto/undongs.uploadimg.schema';
 import { Undong } from '../undongs.schema';
 
 @Injectable()
@@ -12,14 +13,21 @@ export class UndongsService {
   constructor(
     @InjectModel(Undong.name) private readonly undongModel: Model<Undong>,
     @InjectModel(Labtime.name) private readonly labtimeModel: Model<Labtime>,
+    @InjectModel(ImageUpload.name)
+    private readonly uploadModel: Model<ImageUpload>,
     private readonly userRepository: UsersRepository,
   ) {}
   async getAll(user: User) {
-    const result =
-      // = await this.undongModel.find();
-      await this.undongModel.find({
-        myid: user.id,
-      });
+    const undongresult = await this.undongModel.find({
+      myid: user.id,
+    });
+    const undongImg = await this.uploadModel.find({
+      myid: user.id,
+    });
+
+    const result = [].concat(undongresult, undongImg).sort((a, b) => {
+      return a.createdAt - b.createdAt;
+    });
     return result;
   }
   async postUndong(undongsData: UndongRequestDto, user: User) {
@@ -41,6 +49,15 @@ export class UndongsService {
     });
 
     return newUndongData;
+  }
+
+  async uploadImg(user: User, files: Express.Multer.File[]) {
+    const Filename = `undongs/${files[0].filename}`;
+    const ImageUploads = await new this.uploadModel({
+      myid: user.id,
+      imgUrl: Filename,
+    }).save();
+    return ImageUploads;
   }
   async delUndong() {
     throw new Error('Method not implemented.');

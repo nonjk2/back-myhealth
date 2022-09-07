@@ -46,8 +46,6 @@ export class UndongsController {
     @CurrentUser() user: User,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    return {
-      image: `http://localhost:8000/media/undongs/${files[0].filename}`,
-    };
+    return this.undongService.uploadImg(user, files);
   }
 }

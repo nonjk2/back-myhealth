@@ -10,7 +10,6 @@ const options: SchemaOptions = {
 @Schema(options)
 export class ImageUpload extends Document {
   @Prop({
-    type: Types.ObjectId,
     required: true,
     ref: User.name,
   })
