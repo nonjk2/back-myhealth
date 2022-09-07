@@ -25,9 +25,7 @@ export class UndongsService {
       myid: user.id,
     });
 
-    const result = [].concat(undongresult, undongImg).sort((a, b) => {
-      return a.createdAt - b.createdAt;
-    });
+    const result = { undongs: undongresult, undongimg: undongImg };
     return result;
   }
   async postUndong(undongsData: UndongRequestDto, user: User) {
