@@ -3,23 +3,24 @@ import {
   Controller,
   Get,
   Post,
-  Req,
-  UploadedFiles,
-  UseFilters,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { AwsService } from 'src/aws.service';
 import { CurrentUser } from 'src/common/decoraters/user.decorater';
-import { multerOptions } from 'src/common/utils/multer.options';
 import { User } from 'src/users/user.schema';
 import { UndongRequestDto } from '../dto/undongs.request.dto';
 import { UndongsService } from '../service/undongs.service';
 
 @Controller('undongs')
 export class UndongsController {
-  constructor(private readonly undongService: UndongsService) {}
+  constructor(
+    private readonly undongService: UndongsService,
+    private readonly awsService: AwsService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -39,13 +40,15 @@ export class UndongsController {
   async DeleteUndongs() {
     return this.undongService.delUndong();
   }
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FilesInterceptor('image', 10, multerOptions('undongs')))
   @Post('upload')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
   async UploadUndong(
     @CurrentUser() user: User,
-    @UploadedFiles() files: Array<Express.Multer.File>,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.undongService.uploadImg(user, files);
+    console.log(file);
+    await this.awsService.uploadFileToS3('undongs', file);
+    // return await this.undongService.uploadImg(user, file);
   }
 }

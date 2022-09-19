@@ -1,7 +1,10 @@
 import { forwardRef, Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MulterModule } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
 import { AuthModule } from 'src/auth/auth.module';
+import { AwsService } from 'src/aws.service';
 import { User, UserSchema } from 'src/users/user.schema';
 import { UsersModule } from 'src/users/users.module';
 import { UsersRepository } from 'src/users/users.repository';
@@ -15,6 +18,7 @@ import { Undong, Undongchema } from './undongs.schema';
   imports: [
     MulterModule.register({
       dest: './upload', //upload 폴더에 저장
+      storage: memoryStorage(),
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: Undong.name, schema: Undongchema }]),
@@ -25,6 +29,6 @@ import { Undong, Undongchema } from './undongs.schema';
     UsersModule,
   ],
   controllers: [UndongsController],
-  providers: [UndongsService, UsersRepository],
+  providers: [UndongsService, UsersRepository, AwsService],
 })
 export class UndongsModule {}
