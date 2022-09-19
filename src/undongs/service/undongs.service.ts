@@ -49,8 +49,8 @@ export class UndongsService {
     return newUndongData;
   }
 
-  async uploadImg(user: User, files: Express.Multer.File) {
-    const Filename = `undongs/${files.filename}`;
+  async uploadImg(user: User, files: string) {
+    const Filename = `${files}`;
     const ImageUploads = await new this.uploadModel({
       myid: user.id,
       imgUrl: Filename,

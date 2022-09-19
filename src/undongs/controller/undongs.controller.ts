@@ -47,8 +47,7 @@ export class UndongsController {
     @CurrentUser() user: User,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log(file);
-    await this.awsService.uploadFileToS3('undongs', file);
-    // return await this.undongService.uploadImg(user, file);
+    const myundongImg = await this.awsService.uploadFileToS3('undongs', file);
+    return await this.undongService.uploadImg(user, myundongImg.key);
   }
 }
