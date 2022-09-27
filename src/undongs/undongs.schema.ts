@@ -34,7 +34,7 @@ export class Undong extends Document {
   @IsString()
   @Prop()
   @IsNotEmpty()
-  activetime: string;
+  activetime: number;
 
   @Prop()
   sets?: Labtime[];
